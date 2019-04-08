@@ -37,3 +37,5 @@ Rebuild the AMI above, specify the size of the image and put whatever you want i
 another test
 another test
 another test
+another test
+another test
