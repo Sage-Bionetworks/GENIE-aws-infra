@@ -5,6 +5,7 @@ application.
 
 # Purpose
 This repo contains infrastructure templates for the GENIE batch jobs.
+
 * validation
 * input to database
 * database to staging
