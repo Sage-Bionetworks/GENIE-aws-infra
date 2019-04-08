@@ -35,3 +35,4 @@ sudo rm -rf /var/lib/ecs/data/ecs_agent_data.json
 
 Rebuild the AMI above, specify the size of the image and put whatever you want in the instance that you would want to bindtest
 another test
+another test
