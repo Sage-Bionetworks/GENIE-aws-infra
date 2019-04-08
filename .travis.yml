@@ -2,7 +2,7 @@ sudo: false
 language: python
 python: 3.6
 cache: pip
-fast_finish: false
+fast_finish: true
 branches:
   only:
   - master
