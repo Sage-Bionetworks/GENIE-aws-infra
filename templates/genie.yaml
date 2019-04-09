@@ -10,7 +10,7 @@ Parameters:
     Description: The Genie main processing and validation docker container image
     Type: String
   MutationImage:
-    Description: The Genie mutation processing docker container image 
+    Description: The Genie mutation processing docker container image
     Type: String
 
 Resources:
@@ -98,7 +98,7 @@ Resources:
         Command:
           - python
           - database_to_staging.py
-          - Jan-2019 
+          - Jan-2019
           - /root/cbioportal
           - 6.2-consortium
           - --pemFile
@@ -138,8 +138,8 @@ Resources:
         Command:
           - python
           - input_to_database.py
-          - vcf 
-          - --pemFile 
+          - vcf
+          - --pemFile
           - /root/.ssh/genie.pem
           - --onlyValidate
         Volumes:
@@ -216,7 +216,7 @@ Resources:
           - python
           - input_to_database.py
           - vcf
-          - --pemFile 
+          - --pemFile
           - /root/.ssh/genie.pem
           - --vcf2mafPath
           - /root/vcf2maf-1.6.14
