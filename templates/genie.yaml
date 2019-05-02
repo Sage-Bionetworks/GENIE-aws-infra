@@ -112,6 +112,7 @@ Resources:
       JobQueueName: !Join
         - '-'
         - - !Ref AWS::StackName
+          - "dev"
           - "job"
           - "queue"
       ComputeEnvironmentOrder:
