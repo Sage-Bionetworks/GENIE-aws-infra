@@ -6,6 +6,9 @@ Parameters:
   ComputeImageId:
     Description: The Genie compute resource image ID
     Type: 'AWS::EC2::Image::Id'
+  DevComputeImageId:
+    Description: The develop Genie compute resource image ID
+    Type: 'AWS::EC2::Image::Id'
   MainImage:
     Description: The Genie main processing and validation docker container image
     Type: String
@@ -65,6 +68,27 @@ Resources:
           - !ImportValue us-east-1-computevpc-PrivateSubnet2
         MinvCpus: 0
         ImageId: !Ref ComputeImageId
+        InstanceRole: !GetAtt BatchInstanceProfile.Arn
+        InstanceTypes:
+          - optimal
+        DesiredvCpus: 8
+  DevBatchComputeEnvironment:
+    Type: "AWS::Batch::ComputeEnvironment"
+    Properties:
+      Type: MANAGED
+      ServiceRole: !GetAtt BatchServiceRole.Arn
+      State: ENABLED
+      ComputeResources:
+        Type: EC2
+        MaxvCpus: 256
+        SecurityGroupIds:
+          - !ImportValue us-east-1-computevpc-VpnSecurityGroup
+        Subnets:
+          - !ImportValue us-east-1-computevpc-PrivateSubnet
+          - !ImportValue us-east-1-computevpc-PrivateSubnet1
+          - !ImportValue us-east-1-computevpc-PrivateSubnet2
+        MinvCpus: 0
+        ImageId: !Ref DevComputeImageId
         InstanceRole: !GetAtt BatchInstanceProfile.Arn
         InstanceTypes:
           - optimal
@@ -463,6 +487,10 @@ Outputs:
     Value: !Ref BatchComputeEnvironment
     Export:
       Name: !Sub '${AWS::Region}-${AWS::StackName}-BatchComputeEnvironment'
+  DevBatchComputeEnvironment:
+    Value: !Ref DevBatchComputeEnvironment
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-DevBatchComputeEnvironment'
   BatchJobQueue:
     Value: !Ref BatchJobQueue
     Export:
