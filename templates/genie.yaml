@@ -28,16 +28,28 @@ Resources:
         Statement:
         - Effect: Allow
           Action:
-          - batch:SubmitJob
-          - batch:CancelJob
-          - batch:TerminateJob
           - sts:AssumeRole
-          Resource:
-          - !Sub 'arn:aws:batch:${AWS::Region}:${AWS::AccountId}:job-definition/${AWS::StackName}-*'
-          - !Sub 'arn:aws:batch:${AWS::Region}:${AWS::AccountId}:job-queue/${AWS::StackName}-*'
           Principal:
             AWS:
               - !Ref SubmitterArn
+  BatchSubmitRolePolicy:
+    Type: "AWS::IAM::Policy"
+    Properties:
+      PolicyName: "batch-interaction"
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Effect: Allow
+          Action:
+          - batch:SubmitJob
+          - batch:CancelJob
+          - batch:TerminateJob
+          Resource:
+          - !Sub 'arn:aws:batch:${AWS::Region}:${AWS::AccountId}:job-definition/${AWS::StackName}-*'
+          - !Sub 'arn:aws:batch:${AWS::Region}:${AWS::AccountId}:job-queue/${AWS::StackName}-*'
+      Roles:
+        -
+          !Ref BatchSubmitRole
   BatchServiceRole:
     Type: "AWS::IAM::Role"
     Properties:
