@@ -15,8 +15,29 @@ Parameters:
   MutationImage:
     Description: The Genie mutation processing docker container image
     Type: String
+  SubmitterArn:
+    Description: AWS account submitting batch job
+    Type: String
 
 Resources:
+  BatchSubmitRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Action:
+          - batch:SubmitJob
+          - batch:CancelJob
+          - batch:TerminateJob
+          - sts:AssumeRole
+          Resource:
+          - !Sub 'arn:aws:batch:${AWS::Region}:${AWS::AccountId}:job-definition/${AWS::StackName}-*'
+          - !Sub 'arn:aws:batch:${AWS::Region}:${AWS::AccountId}:job-queue/${AWS::StackName}-*'
+          Principal:
+            AWS:
+              - !Ref SubmitterArn
   BatchServiceRole:
     Type: "AWS::IAM::Role"
     Properties:
