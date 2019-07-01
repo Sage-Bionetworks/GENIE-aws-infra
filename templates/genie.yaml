@@ -41,12 +41,15 @@ Resources:
         Statement:
         - Effect: Allow
           Action:
-          - batch:SubmitJob
-          - batch:CancelJob
-          - batch:TerminateJob
-          - batch:DescribeJobDefinitions
-          - batch:DescribeJobQueues
-          - batch:DescribeComputeEnvironments
+          #- batch:SubmitJob
+          #- batch:CancelJob
+          #- batch:TerminateJob
+          #- batch:DescribeJobDefinitions
+          #- batch:DescribeJobQueues
+          #- batch:DescribeComputeEnvironments
+          # Batch does not support resource level policies
+          # https://forums.aws.amazon.com/thread.jspa?messageID=799079&tstart=0
+          - batch:*
           Resource:
           - !Sub 'arn:aws:batch:${AWS::Region}:${AWS::AccountId}:job-definition/${AWS::StackName}-*'
           - !Sub 'arn:aws:batch:${AWS::Region}:${AWS::AccountId}:job-queue/${AWS::StackName}-*'
