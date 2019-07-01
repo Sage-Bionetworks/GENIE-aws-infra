@@ -50,7 +50,8 @@ Resources:
           # Batch does not support resource level policies
           # https://forums.aws.amazon.com/thread.jspa?messageID=799079&tstart=0
           - batch:*
-          Resource: "*"
+          Resource: 
+          - "*"
       Roles:
         -
           !Ref BatchSubmitRole
