@@ -29,6 +29,8 @@ Resources:
         - Effect: Allow
           Action:
           - batch:SubmitJob
+          - batch:CancelJob
+          - batch:TerminateJob
           - sts:AssumeRole
           Resource:
           - !Sub 'arn:aws:batch:${AWS::Region}:${AWS::AccountId}:job-definition/${AWS::StackName}-*'
