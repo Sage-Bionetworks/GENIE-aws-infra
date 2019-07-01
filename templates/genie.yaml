@@ -44,6 +44,9 @@ Resources:
           - batch:SubmitJob
           - batch:CancelJob
           - batch:TerminateJob
+          - batch:DescribeJobDefinitions
+          - batch:DescribeJobQueues
+          - batch:DescribeComputeEnvironments
           Resource:
           - !Sub 'arn:aws:batch:${AWS::Region}:${AWS::AccountId}:job-definition/${AWS::StackName}-*'
           - !Sub 'arn:aws:batch:${AWS::Region}:${AWS::AccountId}:job-queue/${AWS::StackName}-*'
