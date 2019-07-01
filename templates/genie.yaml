@@ -35,7 +35,7 @@ Resources:
   BatchSubmitRolePolicy:
     Type: "AWS::IAM::Policy"
     Properties:
-      PolicyName: "admin"
+      PolicyName: "batch-interaction"
       PolicyDocument:
         Version: "2012-10-17"
         Statement:
