@@ -11,4 +11,4 @@ parameters:
   MainImage: sagebionetworks/genie:latest
   MutationImage: sagebionetworks/genie:vcf2maf
   # AWS user ARN
-  Submitter: arn:aws:iam::055273631518:user/thomas.yu@sagebase.org
+  SubmitterArn: arn:aws:iam::055273631518:user/thomas.yu@sagebase.org

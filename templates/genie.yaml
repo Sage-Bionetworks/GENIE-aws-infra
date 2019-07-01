@@ -15,7 +15,7 @@ Parameters:
   MutationImage:
     Description: The Genie mutation processing docker container image
     Type: String
-  Submitter:
+  SubmitterArn:
     Description: AWS account submitting batch job
     Type: String
 
@@ -31,11 +31,11 @@ Resources:
           - batch:SubmitJob
           - sts:AssumeRole
           Resource:
-          - arn:aws:batch:us-east-1:055273631518:job-definition/genie-*
-          - arn:aws:batch:us-east-1:055273631518:job-queue/genie-*
+          - !Sub 'arn:aws:batch:${AWS::Region}:${AWS::AccountId}:job-definition/${AWS::StackName}-*'
+          - !Sub 'arn:aws:batch:${AWS::Region}:${AWS::AccountId}:job-queue/${AWS::StackName}-*'
           Principal:
             AWS:
-              - !Ref Submitter
+              - !Ref SubmitterArn
   BatchServiceRole:
     Type: "AWS::IAM::Role"
     Properties:
