@@ -128,16 +128,11 @@ Resources:
           - optimal
         DesiredvCpus: 8
         Tags:
-          - Key: "parkmycloud"
-            Value: !Ref ParkMyCloudManaged
-          - Key: "Name"
-            Value: !Sub '${AWS::StackName}-BatchComputeEnvironment'
-          - Key: "Department"
-            Value: !Ref Department
-          - Key: "Project"
-            Value: !Ref Project
-          - Key: "OwnerEmail"
-            Value: !Ref OwnerEmail
+          "parkmycloud": !Ref ParkMyCloudManaged
+          "Name": !Sub '${AWS::StackName}-BatchComputeEnvironment'
+          "Department": !Ref Department
+          "Project": !Ref Project
+          "OwnerEmail": !Ref OwnerEmail
   DevBatchComputeEnvironment:
     Type: "AWS::Batch::ComputeEnvironment"
     Properties:
@@ -160,16 +155,11 @@ Resources:
           - optimal
         DesiredvCpus: 8
         Tags:
-          - Key: "parkmycloud"
-            Value: !Ref ParkMyCloudManaged
-          - Key: "Name"
-            Value: !Sub '${AWS::StackName}-BatchComputeEnvironment'
-          - Key: "Department"
-            Value: !Ref Department
-          - Key: "Project"
-            Value: !Ref Project
-          - Key: "OwnerEmail"
-            Value: !Ref OwnerEmail
+          "parkmycloud": !Ref ParkMyCloudManaged
+          "Name": !Sub '${AWS::StackName}-DevBatchComputeEnvironment'
+          "Department": !Ref Department
+          "Project": !Ref Project
+          "OwnerEmail": !Ref OwnerEmail
   BatchJobQueue:
     Type: "AWS::Batch::JobQueue"
     Properties:
