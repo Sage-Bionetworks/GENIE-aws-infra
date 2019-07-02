@@ -12,3 +12,7 @@ parameters:
   MutationImage: sagebionetworks/genie:vcf2maf
   # AWS user ARN
   SubmitterArn: arn:aws:iam::055273631518:user/thomas.yu@sagebase.org
+
+  Department: "CompOnc"
+  Project: "genie"
+  OwnerEmail: "thomas.yu@sagebase.org"

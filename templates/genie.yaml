@@ -18,6 +18,25 @@ Parameters:
   SubmitterArn:
     Description: AWS account submitting batch job
     Type: String
+  Department:
+    Description: 'The department for this resource'
+    Type: String
+    AllowedPattern: '^\S*$'
+    ConstraintDescription: 'Must be string with no spaces'
+  Project:
+    Description: 'The name of the project that this resource is used for'
+    Type: String
+    AllowedPattern: '^\S*$'
+    ConstraintDescription: 'Must be string with no spaces'
+  OwnerEmail:
+    Description: 'Email address of the owner of this resource'
+    Type: String
+    AllowedPattern: '^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$'
+    ConstraintDescription: 'Must be an acceptable email address syntax(i.e. joe.smith@sagebase.org)'
+  ParkMyCloudManaged:
+    Description: Allow ParkMyCloud service to start/stop resources
+    Type: String
+    Default: 'yes'
 
 Resources:
   BatchSubmitRole:
@@ -108,6 +127,17 @@ Resources:
         InstanceTypes:
           - optimal
         DesiredvCpus: 8
+        Tags:
+          - Key: "parkmycloud"
+            Value: !Ref ParkMyCloudManaged
+          - Key: "Name"
+            Value: !Sub '${AWS::StackName}-BatchComputeEnvironment'
+          - Key: "Department"
+            Value: !Ref Department
+          - Key: "Project"
+            Value: !Ref Project
+          - Key: "OwnerEmail"
+            Value: !Ref OwnerEmail
   DevBatchComputeEnvironment:
     Type: "AWS::Batch::ComputeEnvironment"
     Properties:
@@ -129,6 +159,17 @@ Resources:
         InstanceTypes:
           - optimal
         DesiredvCpus: 8
+        Tags:
+          - Key: "parkmycloud"
+            Value: !Ref ParkMyCloudManaged
+          - Key: "Name"
+            Value: !Sub '${AWS::StackName}-BatchComputeEnvironment'
+          - Key: "Department"
+            Value: !Ref Department
+          - Key: "Project"
+            Value: !Ref Project
+          - Key: "OwnerEmail"
+            Value: !Ref OwnerEmail
   BatchJobQueue:
     Type: "AWS::Batch::JobQueue"
     Properties:
