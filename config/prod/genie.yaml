@@ -7,3 +7,7 @@ parameters:
   ComputeImageId: ami-033b8c0b4b16a03cd
   MainImage: sagebionetworks/genie:latest
   MutationImage: sagebionetworks/genie:vcf2maf
+
+  Department: "CompOnc"
+  Project: "genie"
+  OwnerEmail: "thomas.yu@sagebase.org"

@@ -12,6 +12,25 @@ Parameters:
   MutationImage:
     Description: The Genie mutation processing docker container image
     Type: String
+  Department:
+    Description: 'The department for this resource'
+    Type: String
+    AllowedPattern: '^\S*$'
+    ConstraintDescription: 'Must be string with no spaces'
+  Project:
+    Description: 'The name of the project that this resource is used for'
+    Type: String
+    AllowedPattern: '^\S*$'
+    ConstraintDescription: 'Must be string with no spaces'
+  OwnerEmail:
+    Description: 'Email address of the owner of this resource'
+    Type: String
+    AllowedPattern: '^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$'
+    ConstraintDescription: 'Must be an acceptable email address syntax(i.e. joe.smith@sagebase.org)'
+  ParkMyCloudManaged:
+    Description: Allow ParkMyCloud service to start/stop resources
+    Type: String
+    Default: 'yes'
 
 Resources:
   BatchServiceRole:
@@ -69,6 +88,39 @@ Resources:
         InstanceTypes:
           - optimal
         DesiredvCpus: 8
+        Tags:
+          "parkmycloud": !Ref ParkMyCloudManaged
+          "Name": !Sub '${AWS::StackName}-BatchComputeEnvironment'
+          "Department": !Ref Department
+          "Project": !Ref Project
+          "OwnerEmail": !Ref OwnerEmail
+  DevBatchComputeEnvironment:
+    Type: "AWS::Batch::ComputeEnvironment"
+    Properties:
+      Type: MANAGED
+      ServiceRole: !GetAtt BatchServiceRole.Arn
+      State: ENABLED
+      ComputeResources:
+        Type: EC2
+        MaxvCpus: 256
+        SecurityGroupIds:
+          - !ImportValue us-east-1-computevpc-VpnSecurityGroup
+        Subnets:
+          - !ImportValue us-east-1-computevpc-PrivateSubnet
+          - !ImportValue us-east-1-computevpc-PrivateSubnet1
+          - !ImportValue us-east-1-computevpc-PrivateSubnet2
+        MinvCpus: 0
+        ImageId: !Ref DevComputeImageId
+        InstanceRole: !GetAtt BatchInstanceProfile.Arn
+        InstanceTypes:
+          - optimal
+        DesiredvCpus: 8
+        Tags:
+          "parkmycloud": !Ref ParkMyCloudManaged
+          "Name": !Sub '${AWS::StackName}-DevBatchComputeEnvironment'
+          "Department": !Ref Department
+          "Project": !Ref Project
+          "OwnerEmail": !Ref OwnerEmail
   BatchJobQueue:
     Type: "AWS::Batch::JobQueue"
     Properties:
