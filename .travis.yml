@@ -24,7 +24,7 @@ jobs:
     - stage: validate
       script:
         - yamllint ./config ./templates
-        - ./lint_stack.sh -l ./config/prod || travis_terminate 1
+#        - ./lint_stack.sh -l ./config/prod || travis_terminate 1
         - cfn-lint ./templates/**/*
     - stage: deploy
       script:
