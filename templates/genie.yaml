@@ -15,9 +15,6 @@ Parameters:
   MutationImage:
     Description: The Genie mutation processing docker container image
     Type: String
-  SubmitterArn:
-    Description: AWS account submitting batch job
-    Type: String
   Department:
     Description: 'The department for this resource'
     Type: String
@@ -39,41 +36,6 @@ Parameters:
     Default: 'yes'
 
 Resources:
-  BatchSubmitRole:
-    Type: 'AWS::IAM::Role'
-    Properties:
-      AssumeRolePolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-        - Effect: Allow
-          Action:
-          - sts:AssumeRole
-          Principal:
-            AWS:
-              - !Ref SubmitterArn
-  BatchSubmitRolePolicy:
-    Type: "AWS::IAM::Policy"
-    Properties:
-      PolicyName: "batch-interaction"
-      PolicyDocument:
-        Version: "2012-10-17"
-        Statement:
-        - Effect: Allow
-          Action:
-          #- batch:SubmitJob
-          #- batch:CancelJob
-          #- batch:TerminateJob
-          #- batch:DescribeJobDefinitions
-          #- batch:DescribeJobQueues
-          #- batch:DescribeComputeEnvironments
-          # Batch does not support resource level policies
-          # https://forums.aws.amazon.com/thread.jspa?messageID=799079&tstart=0
-          - batch:*
-          Resource:
-          - "*"
-      Roles:
-        -
-          !Ref BatchSubmitRole
   BatchServiceRole:
     Type: "AWS::IAM::Role"
     Properties:
