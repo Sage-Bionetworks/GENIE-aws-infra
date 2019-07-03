@@ -288,7 +288,7 @@ Resources:
           - --pemFile
           - /root/.ssh/genie.pem
           - --vcf2mafPath
-          - /root/vcf2maf-1.6.14
+          - /root/vcf2maf-1.6.17
           - --vepPath
           - /root/vep
           - --vepData
@@ -347,7 +347,7 @@ Resources:
           - --pemFile
           - /root/.ssh/genie.pem
           - --vcf2mafPath
-          - /root/vcf2maf-1.6.14
+          - /root/vcf2maf-1.6.17
           - --vepPath
           - /root/vep
           - --vepData
