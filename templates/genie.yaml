@@ -295,7 +295,7 @@ Resources:
           - /root/.vep
           - --deleteOld
           - --reference
-          - /root/.vep/homo_sapiens/86_GRCh37/Homo_sapiens.GRCh37.75.dna.primary_assembly.fa
+          - /root/.vep/homo_sapiens/95_GRCh37/Homo_sapiens.GRCh37.75.dna.primary_assembly.fa
         Volumes:
           - Host:
               SourcePath: "/home/ec2-user/.ssh/genie.pem"
@@ -354,7 +354,7 @@ Resources:
           - /root/.vep
           - --deleteOld
           - --reference
-          - /root/.vep/homo_sapiens/86_GRCh37/Homo_sapiens.GRCh37.75.dna.primary_assembly.fa
+          - /root/.vep/homo_sapiens/95_GRCh37/Homo_sapiens.GRCh37.75.dna.primary_assembly.fa
         Volumes:
           - Host:
               SourcePath: "/home/ec2-user/.ssh/genie.pem"
