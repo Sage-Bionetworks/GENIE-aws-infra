@@ -191,10 +191,10 @@ Resources:
           - ContainerPath: "/root/.synapseCache"
             ReadOnly: false
             SourceVolume: synapsecache
-      retryStrategy:
-        attempts: 3
-      timeout:
-        attemptDurationSeconds: 1800
+      RetryStrategy:
+        Attempts: 3
+      Timeout:
+        AttemptDurationSeconds: 1800
   ValidationBatchJob:
     Type: 'AWS::Batch::JobDefinition'
     Properties:
@@ -234,10 +234,10 @@ Resources:
           - ContainerPath: "/root/.synapseCache"
             ReadOnly: false
             SourceVolume: synapsecache
-      retryStrategy:
-        attempts: 3
-      timeout:
-        attemptDurationSeconds: 1800
+      RetryStrategy:
+        Attempts: 3
+      Timeout:
+        AttemptDurationSeconds: 1800
   MainProcessingBatchJob:
     Type: 'AWS::Batch::JobDefinition'
     Properties:
@@ -276,10 +276,10 @@ Resources:
           - ContainerPath: "/root/.synapseCache"
             ReadOnly: false
             SourceVolume: synapsecache
-      retryStrategy:
-        attempts: 3
-      timeout:
-        attemptDurationSeconds: 1800
+      RetryStrategy:
+        Attempts: 3
+      Timeout:
+        AttemptDurationSeconds: 1800
   VcfBatchJob:
     Type: 'AWS::Batch::JobDefinition'
     Properties:
@@ -339,10 +339,10 @@ Resources:
           - ContainerPath: "/root/.synapseCache"
             ReadOnly: false
             SourceVolume: synapsecache
-      retryStrategy:
-        attempts: 3
-      timeout:
-        attemptDurationSeconds: 1800
+      RetryStrategy:
+        Attempts: 3
+      Timeout:
+        AttemptDurationSeconds: 1800
   MafBatchJob:
     Type: 'AWS::Batch::JobDefinition'
     Properties:
@@ -402,10 +402,10 @@ Resources:
           - ContainerPath: "/root/.synapseCache"
             ReadOnly: false
             SourceVolume: synapsecache
-      retryStrategy:
-        attempts: 3
-      timeout:
-        attemptDurationSeconds: 1800
+      RetryStrategy:
+        Attempts: 3
+      Timeout:
+        AttemptDurationSeconds: 1800
   SubmitBatchJobLambda:
     Type: 'AWS::Lambda::Function'
     Properties:
