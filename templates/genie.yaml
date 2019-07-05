@@ -194,7 +194,7 @@ Resources:
       RetryStrategy:
         Attempts: 3
       Timeout:
-        AttemptDurationSeconds: 1800
+        AttemptDurationSeconds: 172800
   ValidationBatchJob:
     Type: 'AWS::Batch::JobDefinition'
     Properties:
@@ -237,7 +237,7 @@ Resources:
       RetryStrategy:
         Attempts: 3
       Timeout:
-        AttemptDurationSeconds: 1800
+        AttemptDurationSeconds: 10800
   MainProcessingBatchJob:
     Type: 'AWS::Batch::JobDefinition'
     Properties:
@@ -279,7 +279,7 @@ Resources:
       RetryStrategy:
         Attempts: 3
       Timeout:
-        AttemptDurationSeconds: 1800
+        AttemptDurationSeconds: 86400
   VcfBatchJob:
     Type: 'AWS::Batch::JobDefinition'
     Properties:
@@ -342,7 +342,7 @@ Resources:
       RetryStrategy:
         Attempts: 3
       Timeout:
-        AttemptDurationSeconds: 1800
+        AttemptDurationSeconds: 172800
   MafBatchJob:
     Type: 'AWS::Batch::JobDefinition'
     Properties:
@@ -405,7 +405,7 @@ Resources:
       RetryStrategy:
         Attempts: 3
       Timeout:
-        AttemptDurationSeconds: 1800
+        AttemptDurationSeconds: 172800
   SubmitBatchJobLambda:
     Type: 'AWS::Lambda::Function'
     Properties:
