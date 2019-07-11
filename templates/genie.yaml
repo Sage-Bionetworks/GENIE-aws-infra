@@ -174,6 +174,10 @@ Resources:
           - ContainerPath: "/root/.synapseCache"
             ReadOnly: false
             SourceVolume: synapsecache
+      RetryStrategy:
+        Attempts: 3
+      Timeout:
+        AttemptDurationSeconds: 172800
   ValidationBatchJob:
     Type: 'AWS::Batch::JobDefinition'
     Properties:
@@ -213,6 +217,10 @@ Resources:
           - ContainerPath: "/root/.synapseCache"
             ReadOnly: false
             SourceVolume: synapsecache
+      RetryStrategy:
+        Attempts: 3
+      Timeout:
+        AttemptDurationSeconds: 10800
   MainProcessingBatchJob:
     Type: 'AWS::Batch::JobDefinition'
     Properties:
@@ -251,6 +259,10 @@ Resources:
           - ContainerPath: "/root/.synapseCache"
             ReadOnly: false
             SourceVolume: synapsecache
+      RetryStrategy:
+        Attempts: 3
+      Timeout:
+        AttemptDurationSeconds: 86400
   VcfBatchJob:
     Type: 'AWS::Batch::JobDefinition'
     Properties:
@@ -271,14 +283,14 @@ Resources:
           - --pemFile
           - /root/.ssh/genie.pem
           - --vcf2mafPath
-          - /root/vcf2maf-1.6.14
+          - /root/vcf2maf-1.6.17
           - --vepPath
           - /root/vep
           - --vepData
           - /root/.vep
           - --deleteOld
           - --reference
-          - /root/.vep/homo_sapiens/86_GRCh37/Homo_sapiens.GRCh37.75.dna.primary_assembly.fa
+          - /root/.vep/homo_sapiens/95_GRCh37/Homo_sapiens.GRCh37.75.dna.primary_assembly.fa
         Volumes:
           - Host:
               SourcePath: "/home/ec2-user/.ssh/genie.pem"
@@ -310,6 +322,10 @@ Resources:
           - ContainerPath: "/root/.synapseCache"
             ReadOnly: false
             SourceVolume: synapsecache
+      RetryStrategy:
+        Attempts: 3
+      Timeout:
+        AttemptDurationSeconds: 172800
   MafBatchJob:
     Type: 'AWS::Batch::JobDefinition'
     Properties:
@@ -330,14 +346,14 @@ Resources:
           - --pemFile
           - /root/.ssh/genie.pem
           - --vcf2mafPath
-          - /root/vcf2maf-1.6.14
+          - /root/vcf2maf-1.6.17
           - --vepPath
           - /root/vep
           - --vepData
           - /root/.vep
           - --deleteOld
           - --reference
-          - /root/.vep/homo_sapiens/86_GRCh37/Homo_sapiens.GRCh37.75.dna.primary_assembly.fa
+          - /root/.vep/homo_sapiens/95_GRCh37/Homo_sapiens.GRCh37.75.dna.primary_assembly.fa
         Volumes:
           - Host:
               SourcePath: "/home/ec2-user/.ssh/genie.pem"
@@ -369,6 +385,10 @@ Resources:
           - ContainerPath: "/root/.synapseCache"
             ReadOnly: false
             SourceVolume: synapsecache
+      RetryStrategy:
+        Attempts: 3
+      Timeout:
+        AttemptDurationSeconds: 172800
   SubmitBatchJobLambda:
     Type: 'AWS::Lambda::Function'
     Properties:
