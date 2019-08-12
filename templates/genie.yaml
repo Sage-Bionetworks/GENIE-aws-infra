@@ -523,7 +523,13 @@ Resources:
                   }
               except ClientError as e:
                   logger.error(e.response['Error']['Message'])
-
+      Tags:
+        - Key: "Department"
+          Value: !Ref Department
+        - Key: "Project"
+          Value: !Ref Project
+        - Key: "OwnerEmail"
+          Value: !Ref OwnerEmail
   PeriodicEvent:
     Type: AWS::Events::Rule
     Properties:
