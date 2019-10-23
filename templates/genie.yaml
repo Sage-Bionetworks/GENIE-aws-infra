@@ -165,7 +165,7 @@ Resources:
         Vcpus: 8
         Memory: 8000
         Command:
-          - python
+          - python3
           - database_to_staging.py
           - Jul-2019
           - /root/cbioportal
@@ -209,7 +209,7 @@ Resources:
         Vcpus: 8
         Memory: 8000
         Command:
-          - python
+          - python3
           - consortium_to_public.py
           - Jan-2020
           - /root/cbioportal
@@ -253,7 +253,7 @@ Resources:
         Vcpus: 8
         Memory: 8000
         Command:
-          - python
+          - python3
           - input_to_database.py
           - vcf
           - --pemFile
@@ -296,7 +296,7 @@ Resources:
         Vcpus: 8
         Memory: 8000
         Command:
-          - python
+          - python3
           - input_to_database.py
           - main
           - --pemFile
@@ -338,7 +338,7 @@ Resources:
         Vcpus: 8
         Memory: 32000
         Command:
-          - python
+          - python3
           - input_to_database.py
           - vcf
           - --pemFile
@@ -352,6 +352,7 @@ Resources:
           - --deleteOld
           - --reference
           - /root/.vep/homo_sapiens/95_GRCh37/Homo_sapiens.GRCh37.75.dna.primary_assembly.fa
+          - --createNewMafDatabase
         Volumes:
           - Host:
               SourcePath: "/home/ec2-user/.ssh/genie.pem"
@@ -401,7 +402,7 @@ Resources:
         Vcpus: 8
         Memory: 32000
         Command:
-          - python
+          - python3
           - input_to_database.py
           - maf
           - --pemFile
