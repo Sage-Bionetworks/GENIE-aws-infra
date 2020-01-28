@@ -547,10 +547,10 @@ Resources:
         AttemptDurationSeconds: 172800
 
 Outputs:
-  SubmitBatchJobLambda:
-    Value: !Ref SubmitBatchJobLambda
+  MyCloudWatchLogGroup:
+    Value: !Ref MyCloudWatchLogGroup
     Export:
-      Name: !Sub '${AWS::Region}-${AWS::StackName}-SubmitBatchJobLambda'
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-CloudWatchLogGroup'
   BatchComputeEnvironment:
     Value: !Ref BatchComputeEnvironment
     Export:
