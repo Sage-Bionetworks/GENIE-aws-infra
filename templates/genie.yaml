@@ -36,11 +36,105 @@ Parameters:
     Default: 'yes'
 
 Resources:
+  MyCloudWatchLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      RetentionInDays: 365
+
+  PublishToCloudwatchPolicy:
+    Type: "AWS::IAM::ManagedPolicy"
+    Properties:
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - 'logs:CreateLogGroup'
+              - 'logs:CreateLogStream'
+              - 'logs:PutLogEvents'
+              - 'logs:DescribeLogGroups'
+            Resource: !GetAtt MyCloudWatchLogGroup.Arn
+      Roles:
+        - !Ref BatchInstanceRole
+
+  JobFailedAlertTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      Subscription:
+        - Protocol: email
+          Endpoint: !Ref OwnerEmail
+
+  JobFailedEventRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: "Event rule for failed jobs."
+      EventPattern:
+        source:
+          - "aws.batch"
+        detail-type:
+          - "Batch Job State Change"
+        detail:
+          status:
+            - "FAILED"
+          jobQueue:
+            - !Ref BatchJobQueue
+      State: "ENABLED"
+      Targets:
+        -
+          Arn: !Ref JobFailedAlertTopic
+          Id: !Sub '${AWS::StackName}-FailedBatchJob-daily'
+
+  EventTopicPolicy:
+    Type: 'AWS::SNS::TopicPolicy'
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: events.amazonaws.com
+            Action: 'sns:Publish'
+            Resource: '*'
+      Topics:
+        - !Ref JobFailedAlertTopic
+
+  PermissionForEventsToInvokeBatch:
+    Type: "AWS::IAM::Role"
+    Properties:
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSBatchServiceEventTargetRole
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: events.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Path: "/"
+
+  ScheduledRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: "ScheduledRule"
+      ScheduleExpression: "rate(1 day)"
+      State: "ENABLED"
+      Targets:
+        -
+          Arn: !Ref BatchJobQueue
+          Id: !Sub '${AWS::StackName}-job-validation'
+          RoleArn: !GetAtt PermissionForEventsToInvokeBatch.Arn
+          BatchParameters:
+            ArrayProperties:
+              Size: 3
+            JobDefinition: !Ref ValidationBatchJob
+            JobName: !Sub '${AWS::StackName}-job-validation'
+
   BatchServiceRole:
     Type: "AWS::IAM::Role"
     Properties:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AWSBatchServiceRole
+        - !Ref PublishToCloudwatchPolicy
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
@@ -451,154 +545,12 @@ Resources:
         Attempts: 3
       Timeout:
         AttemptDurationSeconds: 172800
-  SubmitBatchJobLambda:
-    Type: 'AWS::Lambda::Function'
-    Properties:
-      Role: !GetAtt LambdaExecutionRole.Arn
-      Runtime: python2.7
-      Timeout: 3
-      Handler: index.lambda_handler
-      Environment:
-        Variables:
-          JOB_NAME: !Join
-            - '-'
-            - - !Ref AWS::StackName
-              - "job"
-          JOB_QUEUE: !Join
-            - '-'
-            - - !Ref AWS::StackName
-              - "job"
-              - "queue"
-          JOB_DEFINITION: !Join
-            - '-'
-            - - !Ref AWS::StackName
-              - "job"
-              - "validation"
-      Code:
-        ZipFile: |
-          from __future__ import print_function
-          import json
-          import logging
-          import os
-          import boto3
-          from botocore.exceptions import ClientError
 
-          logger = logging.getLogger()
-          logger.setLevel(logging.DEBUG)
-
-          def lambda_handler(event, context):
-              batch = boto3.client('batch')
-              # Log the received event
-              logger.debug("Received event: " + json.dumps(event, indent=2))
-
-              # Get parameters for the SubmitJob call
-              # http://docs.aws.amazon.com/batch/latest/APIReference/API_SubmitJob.html
-              # These should be passed in via Lambda Environment Variables
-              try:
-                  jobName = os.environ['JOB_NAME']
-                  jobQueue = os.environ['JOB_QUEUE']
-                  jobDefinition = os.environ['JOB_DEFINITION']
-              except (KeyError, ValueError, Exception) as e:
-                  logger.error(e.response['Error']['Message'])
-
-              # containerOverrides and parameters are optional
-              if event.get('containerOverrides'):
-                  containerOverrides = event['containerOverrides']
-              else:
-                  containerOverrides = {}
-              if event.get('parameters'):
-                  parameters = event['parameters']
-              else:
-                  parameters = {}
-
-              try:
-                  # Submit a Batch Job
-                  response = batch.submit_job(jobQueue=jobQueue, jobName=jobName, jobDefinition=jobDefinition,
-                                              containerOverrides=containerOverrides, parameters=parameters)
-                  # Log response from AWS Batch
-                  logger.debug("Response: " + json.dumps(response, indent=2))
-                  # Return the jobId
-                  jobId = response['jobId']
-                  return {
-                      'jobId': jobId
-                  }
-              except ClientError as e:
-                  logger.error(e.response['Error']['Message'])
-      Tags:
-        - Key: "Department"
-          Value: !Ref Department
-        - Key: "Project"
-          Value: !Ref Project
-        - Key: "OwnerEmail"
-          Value: !Ref OwnerEmail
-  PeriodicEvent:
-    Type: AWS::Events::Rule
-    Properties:
-      ScheduleExpression: "rate(1 day)"
-      Targets:
-        - Arn: !GetAtt SubmitBatchJobLambda.Arn
-          Id: !Ref SubmitBatchJobLambda
-  LambdaExecutionRole:
-    Type: 'AWS::IAM::Role'
-    Properties:
-      AssumeRolePolicyDocument:
-        Version: 2012-10-17
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service: lambda.amazonaws.com
-            Action:
-              - 'sts:AssumeRole'
-      Path: /
-      Policies:
-        - PolicyName: PublishToCloudwatch
-          PolicyDocument:
-            Version: 2012-10-17
-            Statement:
-              - Effect: Allow
-                Action:
-                  - 'logs:CreateLogGroup'
-                  - 'logs:CreateLogStream'
-                  - 'logs:PutLogEvents'
-                Resource: 'arn:aws:logs:*:*:*'
-        - PolicyName: BatchJobAccess
-          PolicyDocument:
-            Version: '2012-10-17'
-            Statement:
-              - Effect: Allow
-                Action:
-                  - batch:DescribeJobs
-                  - batch:ListJobs
-                  - batch:SubmitJob
-                Resource: "*"
-  LambdaInvokePermission:
-    Type: AWS::Lambda::Permission
-    Properties:
-      FunctionName: !GetAtt SubmitBatchJobLambda.Arn
-      Action: lambda:InvokeFunction
-      Principal: events.amazonaws.com
-      SourceArn: !GetAtt PeriodicEvent.Arn
-  SubmitBatchJobLambdaFailureAlarm:
-    Type: "AWS::CloudWatch::Alarm"
-    Properties:
-      ActionsEnabled: true
-      AlarmActions:
-        - !ImportValue us-east-1-AccountAlertTopics-SNSAlertsErrorArn
-      MetricName: !Sub "${SubmitBatchJobLambda}-FailureAlarm"
-      ComparisonOperator: GreaterThanThreshold
-      Dimensions:
-        - Name: FunctionName
-          Value: !Ref SubmitBatchJobLambda
-      EvaluationPeriods: 1
-      Namespace: AWS/Lambda
-      Period: 60
-      Statistic: Sum
-      Threshold: 0
 Outputs:
-  SubmitBatchJobLambda:
-    Value: !Ref SubmitBatchJobLambda
+  MyCloudWatchLogGroup:
+    Value: !Ref MyCloudWatchLogGroup
     Export:
-      Name: !Sub '${AWS::Region}-${AWS::StackName}-SubmitBatchJobLambda'
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-CloudWatchLogGroup'
   BatchComputeEnvironment:
     Value: !Ref BatchComputeEnvironment
     Export:
