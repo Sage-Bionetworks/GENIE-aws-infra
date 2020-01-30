@@ -124,8 +124,6 @@ Resources:
           Id: !Sub '${AWS::StackName}-job-validation'
           RoleArn: !GetAtt PermissionForEventsToInvokeBatch.Arn
           BatchParameters:
-            ArrayProperties:
-              Size: 3
             JobDefinition: !Ref ValidationBatchJob
             JobName: !Sub '${AWS::StackName}-job-validation'
 
@@ -285,8 +283,6 @@ Resources:
           - ContainerPath: "/root/.synapseCache"
             ReadOnly: false
             SourceVolume: synapsecache
-      RetryStrategy:
-        Attempts: 3
       Timeout:
         AttemptDurationSeconds: 172800
   PublicReleaseGenieBatchJob:
@@ -329,8 +325,6 @@ Resources:
           - ContainerPath: "/root/.synapseCache"
             ReadOnly: false
             SourceVolume: synapsecache
-      RetryStrategy:
-        Attempts: 3
       Timeout:
         AttemptDurationSeconds: 172800
   ValidationBatchJob:
@@ -372,10 +366,8 @@ Resources:
           - ContainerPath: "/root/.synapseCache"
             ReadOnly: false
             SourceVolume: synapsecache
-      RetryStrategy:
-        Attempts: 3
       Timeout:
-        AttemptDurationSeconds: 10800
+        AttemptDurationSeconds: 18000
   MainProcessingBatchJob:
     Type: 'AWS::Batch::JobDefinition'
     Properties:
@@ -414,8 +406,6 @@ Resources:
           - ContainerPath: "/root/.synapseCache"
             ReadOnly: false
             SourceVolume: synapsecache
-      RetryStrategy:
-        Attempts: 3
       Timeout:
         AttemptDurationSeconds: 86400
   VcfBatchJob:
@@ -478,8 +468,6 @@ Resources:
           - ContainerPath: "/root/.synapseCache"
             ReadOnly: false
             SourceVolume: synapsecache
-      RetryStrategy:
-        Attempts: 3
       Timeout:
         AttemptDurationSeconds: 172800
   MafBatchJob:
@@ -541,8 +529,6 @@ Resources:
           - ContainerPath: "/root/.synapseCache"
             ReadOnly: false
             SourceVolume: synapsecache
-      RetryStrategy:
-        Attempts: 3
       Timeout:
         AttemptDurationSeconds: 172800
 
