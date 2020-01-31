@@ -258,10 +258,10 @@ Resources:
         Memory: 8000
         Command:
           - python3
-          - database_to_staging.py
-          - Jul-2019
+          - ../bin/database_to_staging.py
+          - Jan-2020
           - /root/cbioportal
-          - 7.1-consortium
+          - 8.1-consortium
           - --pemFile
           - /root/.ssh/genie.pem
         Volumes:
@@ -300,10 +300,10 @@ Resources:
         Memory: 8000
         Command:
           - python3
-          - consortium_to_public.py
-          - Jan-2020
+          - ../bin/consortium_to_public.py
+          - Jul-2020
           - /root/cbioportal
-          - 7.0-public
+          - 8.0-public
           - --pemFile
           - /root/.ssh/genie.pem
         Volumes:
@@ -342,7 +342,7 @@ Resources:
         Memory: 8000
         Command:
           - python3
-          - input_to_database.py
+          - ../bin/input_to_database.py
           - vcf
           - --pemFile
           - /root/.ssh/genie.pem
@@ -383,7 +383,7 @@ Resources:
         Memory: 8000
         Command:
           - python3
-          - input_to_database.py
+          - ../bin/input_to_database.py
           - main
           - --pemFile
           - /root/.ssh/genie.pem
@@ -423,7 +423,7 @@ Resources:
         Memory: 32000
         Command:
           - python3
-          - input_to_database.py
+          - ../bin/input_to_database.py
           - vcf
           - --pemFile
           - /root/.ssh/genie.pem
@@ -485,7 +485,7 @@ Resources:
         Memory: 32000
         Command:
           - python3
-          - input_to_database.py
+          - ../bin/input_to_database.py
           - maf
           - --pemFile
           - /root/.ssh/genie.pem
@@ -531,7 +531,6 @@ Resources:
             SourceVolume: synapsecache
       Timeout:
         AttemptDurationSeconds: 172800
-
 Outputs:
   MyCloudWatchLogGroup:
     Value: !Ref MyCloudWatchLogGroup
