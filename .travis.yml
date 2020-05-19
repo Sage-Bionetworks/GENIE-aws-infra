@@ -10,7 +10,7 @@ install:
   - wget https://github.com/Sage-Bionetworks/infra-utils/archive/master.zip -O /tmp/infra-utils.zip
   - unzip -j -n /tmp/infra-utils.zip -x "infra-utils-master/.gitignore" "infra-utils-master/LICENSE" "infra-utils-master/*.md" "infra-utils-master/aws/*"
   - ./setup_aws_cli.sh || travis_terminate 1
-  - pip install yamllint cfn-lint sceptre sceptre-ssm-resolver
+  - pip install pre-commit cfn-lint sceptre sceptre-ssm-resolver
 stages:
   - name: validate
   - name: deploy
@@ -19,11 +19,15 @@ jobs:
   include:
     - stage: validate
       script:
-        - yamllint ./config ./templates
-        - ./lint_stack.sh -l ./config/prod || travis_terminate 1
-        - cfn-lint ./templates/**/*
+        - pre-commit autoupdate
+        - pre-commit run --all-files
+      # script:
+      #   - yamllint ./config ./templates
+      #   - ./lint_stack.sh -l ./config/prod || travis_terminate 1
+      #   - cfn-lint ./templates/**/*
     - stage: deploy
       script:
-        - ./lint_stack.sh -r || travis_terminate 1
         - travis_wait 30 sceptre launch prod --yes
-
+      # script:
+      #   - ./lint_stack.sh -r || travis_terminate 1
+      #   - travis_wait 30 sceptre launch prod --yes
