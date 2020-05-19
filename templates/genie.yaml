@@ -347,6 +347,7 @@ Resources:
           - --pemFile
           - /root/.ssh/genie.pem
           - --onlyValidate
+          - --project_id syn3380222
         Volumes:
           - Host:
               SourcePath: "/home/ec2-user/.ssh/genie.pem"
@@ -387,6 +388,7 @@ Resources:
           - main
           - --pemFile
           - /root/.ssh/genie.pem
+          - --project_id syn3380222
         Volumes:
           - Host:
               SourcePath: "/home/ec2-user/.ssh/genie.pem"
@@ -437,6 +439,7 @@ Resources:
           - --reference
           - /root/.vep/homo_sapiens/95_GRCh37/Homo_sapiens.GRCh37.75.dna.primary_assembly.fa
           - --createNewMafDatabase
+          - --project_id syn3380222
         Volumes:
           - Host:
               SourcePath: "/home/ec2-user/.ssh/genie.pem"
@@ -498,6 +501,7 @@ Resources:
           - --deleteOld
           - --reference
           - /root/.vep/homo_sapiens/95_GRCh37/Homo_sapiens.GRCh37.75.dna.primary_assembly.fa
+          - --project_id syn3380222
         Volumes:
           - Host:
               SourcePath: "/home/ec2-user/.ssh/genie.pem"
