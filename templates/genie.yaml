@@ -7,12 +7,11 @@ Parameters:
     Description: The Genie compute resource image ID
     Type: 'AWS::EC2::Image::Id'
   DevComputeImageId:
-    Description: The Genie compute resource image ID
+    Description: The develop Genie compute resource image ID
     Type: 'AWS::EC2::Image::Id'
   MainImage:
     Description: The Genie main processing and validation docker container image
     Type: String
-
   Department:
     Description: 'The department for this resource'
     Type: String
