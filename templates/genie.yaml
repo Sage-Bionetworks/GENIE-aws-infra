@@ -226,6 +226,20 @@ Resources:
           Order: 1
       Priority: 1
       State: ENABLED
+  DevBatchJobQueue:
+    Type: "AWS::Batch::JobQueue"
+    Properties:
+      JobQueueName: !Join
+        - '-'
+        - - !Ref AWS::StackName
+          - "dev"
+          - "job"
+          - "queue"
+      ComputeEnvironmentOrder:
+        - ComputeEnvironment: !Ref DevBatchComputeEnvironment
+          Order: 1
+      Priority: 1
+      State: ENABLED
   ReleaseGenieBatchJob:
     Type: 'AWS::Batch::JobDefinition'
     Properties:
