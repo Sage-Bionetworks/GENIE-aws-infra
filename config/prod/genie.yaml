@@ -6,9 +6,9 @@ parameters:
   # Distibution: Amazon Linux.
   # 95VEP: ami-0a0966a44218e21ab
   ComputeImageId: ami-0a0966a44218e21ab
+  DevComputeImageId: ami-0a0966a44218e21ab
 
   MainImage: sagebionetworks/genie:latest
-  MutationImage: sagebionetworks/genie:vcf2maf
 
   Department: "CompOnc"
   Project: "genie"
