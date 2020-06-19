@@ -463,10 +463,18 @@ Outputs:
     Value: !Ref BatchComputeEnvironment
     Export:
       Name: !Sub '${AWS::Region}-${AWS::StackName}-BatchComputeEnvironment'
+  DevBatchComputeEnvironment:
+    Value: !Ref DevBatchComputeEnvironment
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-DevBatchComputeEnvironment'
   BatchJobQueue:
     Value: !Ref BatchJobQueue
     Export:
       Name: !Sub '${AWS::Region}-${AWS::StackName}-BatchJobQueue'
+  DevBatchJobQueue:
+    Value: !Ref DevBatchJobQueue
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-DevBatchJobQueue'
   ValidationBatchJob:
     Value: !Ref ValidationBatchJob
     Export:
