@@ -12,9 +12,6 @@ Parameters:
   MainImage:
     Description: The Genie main processing and validation docker container image
     Type: String
-  MutationImage:
-    Description: The Genie mutation processing docker container image
-    Type: String
   Department:
     Description: 'The department for this resource'
     Type: String
@@ -254,14 +251,14 @@ Resources:
           - "release"
       ContainerProperties:
         Image: !Ref MainImage
-        Vcpus: 8
-        Memory: 8000
+        Vcpus: 4
+        Memory: 16000
         Command:
           - python3
-          - ../bin/database_to_staging.py
-          - Jan-2020
+          - bin/database_to_staging.py
+          - Jul-2020
           - /root/cbioportal
-          - 8.1-consortium
+          - 9.1-consortium
           - --pemFile
           - /root/.ssh/genie.pem
         Volumes:
@@ -284,7 +281,7 @@ Resources:
             ReadOnly: false
             SourceVolume: synapsecache
       Timeout:
-        AttemptDurationSeconds: 172800
+        AttemptDurationSeconds: 345600
   PublicReleaseGenieBatchJob:
     Type: 'AWS::Batch::JobDefinition'
     Properties:
@@ -296,14 +293,14 @@ Resources:
           - "publicrelease"
       ContainerProperties:
         Image: !Ref MainImage
-        Vcpus: 8
-        Memory: 8000
+        Vcpus: 4
+        Memory: 16000
         Command:
           - python3
-          - ../bin/consortium_to_public.py
-          - Jul-2020
+          - bin/consortium_to_public.py
+          - Jan-2021
           - /root/cbioportal
-          - 8.0-public
+          - 9.0-public
           - --pemFile
           - /root/.ssh/genie.pem
         Volumes:
@@ -326,7 +323,7 @@ Resources:
             ReadOnly: false
             SourceVolume: synapsecache
       Timeout:
-        AttemptDurationSeconds: 172800
+        AttemptDurationSeconds: 345600
   ValidationBatchJob:
     Type: 'AWS::Batch::JobDefinition'
     Properties:
@@ -338,12 +335,12 @@ Resources:
           - "validation"
       ContainerProperties:
         Image: !Ref MainImage
-        Vcpus: 8
-        Memory: 8000
+        Vcpus: 4
+        Memory: 16000
         Command:
           - python3
-          - ../bin/input_to_database.py
-          - vcf
+          - bin/input_to_database.py
+          - mutation
           - --pemFile
           - /root/.ssh/genie.pem
           - --onlyValidate
@@ -382,10 +379,10 @@ Resources:
       ContainerProperties:
         Image: !Ref MainImage
         Vcpus: 8
-        Memory: 8000
+        Memory: 16000
         Command:
           - python3
-          - ../bin/input_to_database.py
+          - bin/input_to_database.py
           - main
           - --pemFile
           - /root/.ssh/genie.pem
@@ -411,71 +408,7 @@ Resources:
             ReadOnly: false
             SourceVolume: synapsecache
       Timeout:
-        AttemptDurationSeconds: 86400
-  VcfBatchJob:
-    Type: 'AWS::Batch::JobDefinition'
-    Properties:
-      Type: container
-      JobDefinitionName: !Join
-        - '-'
-        - - !Ref AWS::StackName
-          - "job"
-          - "vcfprocess"
-      ContainerProperties:
-        Image: !Ref MutationImage
-        Vcpus: 8
-        Memory: 32000
-        Command:
-          - python3
-          - ../bin/input_to_database.py
-          - vcf
-          - --pemFile
-          - /root/.ssh/genie.pem
-          - --vcf2mafPath
-          - /root/vcf2maf-1.6.17
-          - --vepPath
-          - /root/vep
-          - --vepData
-          - /root/.vep
-          - --deleteOld
-          - --reference
-          - /root/.vep/homo_sapiens/95_GRCh37/Homo_sapiens.GRCh37.75.dna.primary_assembly.fa
-          - --createNewMafDatabase
-          - --project_id
-          - syn3380222
-        Volumes:
-          - Host:
-              SourcePath: "/home/ec2-user/.ssh/genie.pem"
-            Name: geniePem
-          - Host:
-              SourcePath: "/home/ec2-user/vep"
-            Name: vepPath
-          - Host:
-              SourcePath: "/home/ec2-user/.vep"
-            Name: vepData
-          - Host:
-              SourcePath: "/home/ec2-user/.synapseCache"
-            Name: synapsecache
-        Environment:
-          - Name: GENIE_PASS
-            Value: (b'\x1b\x1f\xc8\xdb\x9f\x03\x0c\xf6\xd4\x95NI\x06\x97e\xda\x88i~\x89\x9a"\x19ON\x8c\x01\x9a\xb4\xaat\x970\xb0\xeel\xae\t\'\xdb\xf3XUQw\xdb\xe7\x11\xd3\x0bf\xc6\xaf\xae\x11\xe2\xa9W\x8b\x08\xcb\x92\xc5\x8f3-\xf8\x92[\x8b\xb8\xe0\xcc\x87\xc09\xa5\rw\x03\xbc\xa4\xa6Y\xa1\x87\x8d\xe6G\xba5\xbb\xa4\x84xl\xba\xa1\x05\xa6\xc7\x1d&N>\xb7\xf0\x1b\x19#E\xb1\xd5\xaf\xc3\xafU,\xfbb\x95\x9df\xeb\xfe&\x0f\xaa',)
-          - Name: GENIE_USER
-            Value: genieRunner
-        MountPoints:
-          - ContainerPath: "/root/.ssh/genie.pem"
-            ReadOnly: false
-            SourceVolume: geniePem
-          - ContainerPath: "/root/vep"
-            ReadOnly: false
-            SourceVolume: vepPath
-          - ContainerPath: "/root/.vep"
-            ReadOnly: false
-            SourceVolume: vepData
-          - ContainerPath: "/root/.synapseCache"
-            ReadOnly: false
-            SourceVolume: synapsecache
-      Timeout:
-        AttemptDurationSeconds: 172800
+        AttemptDurationSeconds: 259200
   MafBatchJob:
     Type: 'AWS::Batch::JobDefinition'
     Properties:
@@ -486,36 +419,24 @@ Resources:
           - "job"
           - "mafprocess"
       ContainerProperties:
-        Image: !Ref MutationImage
+        Image: !Ref MainImage
         Vcpus: 8
-        Memory: 32000
+        Memory: 40000
         Command:
           - python3
-          - ../bin/input_to_database.py
-          - maf
+          - bin/input_to_database.py
+          - mutation
           - --pemFile
           - /root/.ssh/genie.pem
-          - --vcf2mafPath
-          - /root/vcf2maf-1.6.17
-          - --vepPath
-          - /root/vep
-          - --vepData
-          - /root/.vep
-          - --deleteOld
-          - --reference
-          - /root/.vep/homo_sapiens/95_GRCh37/Homo_sapiens.GRCh37.75.dna.primary_assembly.fa
+          - --genie_annotation_pkg
+          - /root/annotation-tools
           - --project_id
           - syn3380222
+          - --createNewMafDatabase
         Volumes:
           - Host:
               SourcePath: "/home/ec2-user/.ssh/genie.pem"
             Name: geniePem
-          - Host:
-              SourcePath: "/home/ec2-user/vep"
-            Name: vepPath
-          - Host:
-              SourcePath: "/home/ec2-user/.vep"
-            Name: vepData
           - Host:
               SourcePath: "/home/ec2-user/.synapseCache"
             Name: synapsecache
@@ -528,17 +449,11 @@ Resources:
           - ContainerPath: "/root/.ssh/genie.pem"
             ReadOnly: false
             SourceVolume: geniePem
-          - ContainerPath: "/root/vep"
-            ReadOnly: false
-            SourceVolume: vepPath
-          - ContainerPath: "/root/.vep"
-            ReadOnly: false
-            SourceVolume: vepData
           - ContainerPath: "/root/.synapseCache"
             ReadOnly: false
             SourceVolume: synapsecache
       Timeout:
-        AttemptDurationSeconds: 172800
+        AttemptDurationSeconds: 345600
 Outputs:
   MyCloudWatchLogGroup:
     Value: !Ref MyCloudWatchLogGroup
