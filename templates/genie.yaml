@@ -139,11 +139,13 @@ Resources:
             Action:
               - 'sts:AssumeRole'
       Path: "/"
+
   BatchInstanceRole:
     Type: "AWS::IAM::Role"
     Properties:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role
+        - arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
@@ -256,9 +258,9 @@ Resources:
         Command:
           - python3
           - bin/database_to_staging.py
-          - Jul-2020
+          - Jan-2021
           - /root/cbioportal
-          - 9.1-consortium
+          - 10.1-consortium
           - --pemFile
           - /root/.ssh/genie.pem
         Volumes:
@@ -298,9 +300,9 @@ Resources:
         Command:
           - python3
           - bin/consortium_to_public.py
-          - Jan-2021
+          - Jul-2022
           - /root/cbioportal
-          - 9.0-public
+          - 10.0-public
           - --pemFile
           - /root/.ssh/genie.pem
         Volumes:
