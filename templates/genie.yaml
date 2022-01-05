@@ -258,9 +258,9 @@ Resources:
         Command:
           - python3
           - bin/database_to_staging.py
-          - Jul-2021
+          - Jan-2022
           - /root/cbioportal
-          - 11.1-consortium
+          - 12.1-consortium
           - --pemFile
           - /root/.ssh/genie.pem
         Volumes:
@@ -302,7 +302,7 @@ Resources:
           - bin/consortium_to_public.py
           - Jul-2022
           - /root/cbioportal
-          - 10.0-public
+          - 12.0-public
           - --pemFile
           - /root/.ssh/genie.pem
         Volumes:
