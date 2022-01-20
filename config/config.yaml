@@ -11,3 +11,8 @@ aws_account_email: aws.scicomp@sagebase.org
 default_ami: "ami-082278746f893d99c"
 default_key_pair: "scicomp"
 default_vpc: "computevpc"
+stack_tags:
+  Department: "CompOnc"
+  Project: "genie"
+  OwnerEmail: "thomas.yu@sagebase.org"
+  CostCenter: "Genie-AACR / 312000"
