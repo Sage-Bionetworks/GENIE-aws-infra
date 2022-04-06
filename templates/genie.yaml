@@ -350,6 +350,8 @@ Resources:
           - --onlyValidate
           - --project_id
           - syn3380222
+          - --genie_annotation_pkg
+          - /root/annotation-tools
         Volumes:
           - Host:
               SourcePath: "/home/ec2-user/.ssh/genie.pem"
